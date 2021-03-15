@@ -1,4 +1,5 @@
-/* Sets all the text color to red! */
-body {
-    color: red;
+/* I picked colors for `Clair de Lune` theme */
+.highlight-related-link {
+    background-color: #C4C7DC;
+    color: #000000;
 }
