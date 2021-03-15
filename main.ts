@@ -52,7 +52,7 @@ export default class MyPlugin extends Plugin {
                     let linkpath = this.app.metadataCache.getFirstLinkpathDest(link.link, '/');
                     if (linkpath) {
                         let el = document.querySelectorAll(`[data-path="${linkpath.path}"]`)
-                        if (el) {
+                        if (el.length > 0) {
                             this.coloredElements.push(el[0])
                             el[0].classList.add(PLUGIN_CSS_CLASS_NAME)
                         }
