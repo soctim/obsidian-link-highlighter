@@ -1,5 +1,5 @@
 /* I picked colors for `Clair de Lune` theme */
 .highlight-related-link {
-    background-color: #C4C7DC;
-    color: #000000;
+    background-color: var(--text-muted);
+    color: var(--interactive-accent);
 }
