@@ -1,5 +1,14 @@
-/* I picked colors for `Clair de Lune` theme */
+body {
+    --plugin-link-highlighter-background-color: var(--text-muted);
+    --plugin-link-highlighter-text-color: var(--interactive-accent);
+}
+
 .highlight-related-link {
-    background-color: var(--text-muted);
-    color: var(--interactive-accent);
+    background-color: var(--plugin-link-highlighter-background-color);
+    color: var(--plugin-link-highlighter-text-color);
+}
+
+.link-highlighter-example {
+    background-color: var(--plugin-link-highlighter-background-color)!important;
+    color: var(--plugin-link-highlighter-text-color)!important;
 }
