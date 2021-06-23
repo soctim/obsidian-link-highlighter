@@ -1,5 +1,5 @@
 import {App, PluginSettingTab, Setting} from "obsidian";
-import MyPlugin from "./main";
+import LinkHighlighterPlugin from "./main";
 import {Colorizer} from "./helpers";
 
 export interface LinkHighlighterSettings {
@@ -15,10 +15,10 @@ export const DEFAULT_SETTINGS: LinkHighlighterSettings = {
 }
 
 export class HighlighterSettingTab extends PluginSettingTab {
-    plugin: MyPlugin;
+    plugin: LinkHighlighterPlugin;
     colorizer: Colorizer;
 
-    constructor(app: App, plugin: MyPlugin) {
+    constructor(app: App, plugin: LinkHighlighterPlugin) {
         super(app, plugin);
         this.plugin = plugin;
         this.colorizer = new Colorizer(this.plugin.settings)

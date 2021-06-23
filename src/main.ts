@@ -7,7 +7,7 @@ import {
 import {Colorizer} from "./helpers";
 import {PLUGIN_CSS_CLASS_NAME} from "./constants";
 
-export default class MyPlugin extends Plugin {
+export default class LinkHighlighterPlugin extends Plugin {
     coloredElements: any[] = [];
     enabled: boolean = true;
     settings: LinkHighlighterSettings;
@@ -21,12 +21,12 @@ export default class MyPlugin extends Plugin {
             this.colorizer.setupColors();
         })
 
-        this.addRibbonIcon('highlighter', 'Toggle Links Highlighter', () => {
+        this.addRibbonIcon('highlighter', 'Toggle Link Highlighter', () => {
             if (this.enabled) {
-                new Notice('Links Highlighter disabled.');
+                new Notice('Link Highlighter disabled.');
                 this.cleanLinkHighlighter()
             } else {
-                new Notice('Links Highlighter enabled!');
+                new Notice('Link Highlighter enabled!');
                 this.checkEnabled()
             }
             this.enabled = !this.enabled

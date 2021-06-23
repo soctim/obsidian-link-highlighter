@@ -1,10 +1,10 @@
 {
 	"id": "obsidian-link-highlighter-plugin",
-	"name": "Links Highlighter",
-	"version": "1.0.1",
+	"name": "Link Highlighter",
+	"version": "1.0.0",
 	"minAppVersion": "0.9.12",
 	"description": "Highlight all links from selected file.",
 	"author": "Dmitry Sinitsyn",
-	"authorUrl": "soctim@yandex.ru",
+	"authorUrl": "dsinitsyn516@gmail.com",
 	"isDesktopOnly": false
 }
