@@ -1,6 +1,6 @@
 import {App, PluginSettingTab, Setting} from "obsidian";
 import LinkHighlighterPlugin from "./main";
-import {Colorizer} from "./helpers";
+import {Colorizer} from "./colorizer";
 
 export interface LinkHighlighterSettings {
     useCustomColors: boolean,
