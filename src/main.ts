@@ -4,7 +4,7 @@ import {
     HighlighterSettingTab,
     LinkHighlighterSettings,
 } from "./settings";
-import {Colorizer} from "./helpers";
+import {Colorizer} from "./colorizer";
 import {PLUGIN_CSS_CLASS_NAME} from "./constants";
 
 export default class LinkHighlighterPlugin extends Plugin {
@@ -27,13 +27,13 @@ export default class LinkHighlighterPlugin extends Plugin {
                 this.cleanLinkHighlighter()
             } else {
                 new Notice('Link Highlighter enabled!');
-                this.checkEnabled()
+                this.checkHighlightingEnabled()
             }
             this.enabled = !this.enabled
         });
 
-        this.app.metadataCache.on('changed', () => this.checkEnabled())
-        this.app.workspace.on('file-open', () => this.checkEnabled())
+        this.app.metadataCache.on('changed', () => this.checkHighlightingEnabled())
+        this.app.workspace.on('file-open', () => this.checkHighlightingEnabled())
 
         this.app.workspace.on('css-change', () => this.colorizer.setupColors())
 
@@ -52,7 +52,7 @@ export default class LinkHighlighterPlugin extends Plugin {
         await this.saveData(this.settings);
     }
 
-    checkEnabled() {
+    checkHighlightingEnabled() {
         if (this.enabled) {
             this.cleanLinkHighlighter()
             this.findLinks()

@@ -6,5 +6,5 @@
 	"description": "Highlight all links from selected file.",
 	"author": "Dmitry Sinitsyn",
 	"authorUrl": "dsinitsyn516@gmail.com",
-	"isDesktopOnly": false
+	"isDesktopOnly": true
 }
