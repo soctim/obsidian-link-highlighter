@@ -27,7 +27,8 @@ export default class LinkHighlighterPlugin extends Plugin {
                 this.cleanLinkHighlighter()
             } else {
                 new Notice('Link Highlighter enabled!');
-                this.checkHighlightingEnabled()
+                this.cleanLinkHighlighter()
+                this.findLinks()
             }
             this.enabled = !this.enabled
         });
@@ -42,6 +43,9 @@ export default class LinkHighlighterPlugin extends Plugin {
 
     onunload() {
         this.cleanLinkHighlighter()
+        this.app.metadataCache.off('changed', () => this.checkHighlightingEnabled())
+        this.app.workspace.off('file-open', () => this.checkHighlightingEnabled())
+        this.app.workspace.off('css-change', () => this.colorizer.setupColors())
     }
 
     async loadSettings() {
