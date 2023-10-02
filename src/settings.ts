@@ -1,11 +1,13 @@
 import {App, PluginSettingTab, Setting} from "obsidian";
 import LinkHighlighterPlugin from "./main";
 import {Colorizer} from "./colorizer";
+import Pickr from "@simonwep/pickr";
 
 export interface LinkHighlighterSettings {
     useCustomColors: boolean,
     customBackgroundColor: string,
     customTextColor: string
+    customColorRGB?: string
 }
 
 export const DEFAULT_SETTINGS: LinkHighlighterSettings = {
@@ -73,6 +75,8 @@ export class HighlighterSettingTab extends PluginSettingTab {
                     await this.plugin.saveSettings();
                 }));
 
+        this.initPickr(containerEl, 'IMG_VIEW_BACKGROUND_COLOR_NAME', '#00000000');
+
         new Setting(containerEl)
             .setName('Element highlighting example')
             .addButton(btn =>
@@ -86,5 +90,67 @@ export class HighlighterSettingTab extends PluginSettingTab {
             backgroundColorSetting.setDisabled(value)
             textColorSetting.setDisabled(value)
         }
+    }
+
+    initPickr(containerEl: HTMLElement, name: string, defaultColor: string): Setting {
+        let pickrDefault: string = defaultColor;
+
+        let pickr: Pickr;
+        return new Setting(containerEl)
+            .setName('Pick the color')
+            .then((setting) => {
+                pickr = Pickr.create({
+                    el: setting.controlEl.createDiv({cls: "picker"}),
+                    theme: 'nano',
+                    position: "left-middle",
+                    lockOpacity: false, // If true, the user won't be able to adjust any opacity.
+                    default: pickrDefault, // Default color
+                    swatches: [], // Optional color swatches
+                    components: {
+                        preview: true,
+                        hue: true,
+                        opacity: true,
+                        interaction: {
+                            hex: true,
+                            rgba: true,
+                            hsla: false,
+                            input: true,
+                            cancel: true,
+                            save: true,
+                        },
+                    }
+                })
+                    .on('show', (color: Pickr.HSVaColor, instance: Pickr) => { // Pickr got opened
+                        // if (!this.plugin.settings.galleryNavbarToggle) pickr?.hide();
+                        const {result} = (pickr.getRoot() as any).interaction;
+                        requestAnimationFrame(() =>
+                            requestAnimationFrame(() => result.select())
+                        );
+                    })
+                    .on('save', (color: Pickr.HSVaColor, instance: Pickr) => { // User clicked the save / clear button
+                        if (!color) return;
+                        instance.hide();
+                        const savedColor = color.toHEXA().toString();
+                        instance.addSwatch(savedColor);
+                        this.setAndSavePickrSetting(savedColor);
+                    })
+                    .on('cancel', (instance: Pickr) => { // User clicked the cancel button
+                        instance.hide();
+                    })
+            })
+            .addExtraButton((btn) => {
+                btn.setIcon("reset")
+                    .onClick(() => {
+                        pickr.setColor(defaultColor);
+                        this.setAndSavePickrSetting(defaultColor);
+                    })
+                    .setTooltip('restore default color');
+            });
+    }
+
+
+    setAndSavePickrSetting(savedColor: string): void {
+        this.plugin.settings.customColorRGB = savedColor;
+        this.plugin.saveSettings();
     }
 }
