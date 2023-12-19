@@ -35,6 +35,27 @@ export default class LinkHighlighterPlugin extends Plugin {
 
         this.app.metadataCache.on('changed', () => this.checkHighlightingEnabled())
         this.app.workspace.on('file-open', () => this.checkHighlightingEnabled())
+        this.app.workspace.on('layout-change', () => checkNav())
+        const logg = debounce(() => this.checkHighlightingEnabled(), 60)
+        function checkNav() {
+            console.log('on layout-change')
+            const filesEl = document.getElementsByClassName('nav-files-container')[0]
+            if (filesEl) {
+                // this.registerDomEvent(filesEl, 'scroll', () => console.log('le Scrolled'));
+                filesEl.addEventListener('scroll', logg)
+            }
+        }
+
+        
+
+        function debounce(func, timeout = 300){
+            let timer;
+            return (...args) => {
+              clearTimeout(timer);
+              timer = setTimeout(() => { func.apply(this, args); }, timeout);
+            };
+          }
+        
 
         this.app.workspace.on('css-change', () => this.colorizer.setupColors())
 
@@ -71,10 +92,11 @@ export default class LinkHighlighterPlugin extends Plugin {
                 fileCache.links.forEach((link) => {
                     let linkpath = this.app.metadataCache.getFirstLinkpathDest(parseLinktext(link.link).path, '/');
                     if (linkpath && linkpath.path) {
-                        let el = document.querySelectorAll(`[data-path="${linkpath.path}"]`)
-                        if (el.length > 0) {
-                            this.coloredElements.push(el[0])
-                            el[0].classList.add(PLUGIN_CSS_CLASS_NAME)
+                        let els = document.querySelectorAll(`[data-path="${linkpath.path}"]`)
+                        // console.log(els)
+                        if (els.length > 0) {
+                            this.coloredElements.push(els[0])
+                            els[0].classList.add(PLUGIN_CSS_CLASS_NAME)
                         }
                     }
                 })
