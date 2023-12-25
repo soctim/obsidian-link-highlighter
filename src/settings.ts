@@ -1,6 +1,6 @@
-import {App, PluginSettingTab, Setting} from "obsidian";
+import { App, PluginSettingTab, Setting } from "obsidian";
 import LinkHighlighterPlugin from "./main";
-import {Colorizer} from "./colorizer";
+import { Colorizer } from "./colorizer";
 import Pickr from "@simonwep/pickr";
 
 export interface LinkHighlighterSettings {
@@ -27,10 +27,10 @@ export class HighlighterSettingTab extends PluginSettingTab {
     }
 
     display(): void {
-        let {containerEl} = this;
+        let { containerEl } = this;
 
         containerEl.empty();
-        containerEl.createEl('h2', {text: 'Link Highlighter Settings'});
+        containerEl.createEl('h2', { text: 'Link Highlighter Settings' });
 
         new Setting(containerEl)
             .setName('Use Custom Colors')
@@ -52,30 +52,8 @@ export class HighlighterSettingTab extends PluginSettingTab {
                     })
             })
 
-        let backgroundColorSetting = new Setting(containerEl)
-            .setName('Custom Background Color')
-            .addText(component => component
-                .setPlaceholder('Enter HEX color code')
-                .setValue(this.plugin.settings.customBackgroundColor)
-                .setDisabled(!this.plugin.settings.useCustomColors)
-                .onChange(async (value) => {
-                    this.colorizer.setBackgroundColor(value);
-                    this.plugin.settings.customBackgroundColor = value;
-                    await this.plugin.saveSettings();
-                }));
-
-        let textColorSetting = new Setting(containerEl)
-            .setName('Custom Text Color')
-            .addText(text => text
-                .setPlaceholder('Enter HEX color code')
-                .setValue(this.plugin.settings.customTextColor)
-                .onChange(async (value) => {
-                    this.colorizer.setTextColor(value);
-                    this.plugin.settings.customTextColor = value;
-                    await this.plugin.saveSettings();
-                }));
-
-        this.initPickr(containerEl, 'IMG_VIEW_BACKGROUND_COLOR_NAME', '#00000000');
+        let backgroundColorSetting = this.initPickr(containerEl, 'Custom Background Color', this.plugin.settings.customBackgroundColor);
+        let textColorSetting = this.initPickr(containerEl, 'Custom Text Color', this.plugin.settings.customTextColor)
 
         new Setting(containerEl)
             .setName('Element highlighting example')
@@ -97,60 +75,60 @@ export class HighlighterSettingTab extends PluginSettingTab {
 
         let pickr: Pickr;
         return new Setting(containerEl)
-            .setName('Pick the color')
+            .setName(name)
             .then((setting) => {
                 pickr = Pickr.create({
-                    el: setting.controlEl.createDiv({cls: "picker"}),
+                    el: setting.controlEl.createEl('input', { cls: "picker" }),
                     theme: 'nano',
-                    position: "left-middle",
-                    lockOpacity: false, // If true, the user won't be able to adjust any opacity.
-                    default: pickrDefault, // Default color
-                    swatches: [], // Optional color swatches
+                    default: pickrDefault,
                     components: {
                         preview: true,
-                        hue: true,
                         opacity: true,
+                        hue: true,
                         interaction: {
                             hex: true,
-                            rgba: true,
-                            hsla: false,
                             input: true,
-                            cancel: true,
-                            save: true,
-                        },
+                            clear: true,
+                            save: true
+                        }
                     }
                 })
-                    .on('show', (color: Pickr.HSVaColor, instance: Pickr) => { // Pickr got opened
-                        // if (!this.plugin.settings.galleryNavbarToggle) pickr?.hide();
-                        const {result} = (pickr.getRoot() as any).interaction;
+                    .on('show', () => {
+                        const { result } = (pickr.getRoot() as any).interaction;
                         requestAnimationFrame(() =>
                             requestAnimationFrame(() => result.select())
                         );
                     })
-                    .on('save', (color: Pickr.HSVaColor, instance: Pickr) => { // User clicked the save / clear button
+                    .on('save', (color: Pickr.HSVaColor, instance: Pickr) => {
                         if (!color) return;
                         instance.hide();
                         const savedColor = color.toHEXA().toString();
-                        instance.addSwatch(savedColor);
-                        this.setAndSavePickrSetting(savedColor);
+                        this.setAndSavePickrSetting(savedColor, name === 'Custom Text Color' ? 'customTextColor' : 'customBackgroundColor');
                     })
-                    .on('cancel', (instance: Pickr) => { // User clicked the cancel button
+                    .on('cancel', (instance: Pickr) => {
                         instance.hide();
                     })
             })
             .addExtraButton((btn) => {
                 btn.setIcon("reset")
+                    .setDisabled(!this.plugin.settings.useCustomColors)
                     .onClick(() => {
                         pickr.setColor(defaultColor);
-                        this.setAndSavePickrSetting(defaultColor);
+                        this.setAndSavePickrSetting(defaultColor, name === 'Custom Text Color' ? 'customTextColor' : 'customBackgroundColor');
                     })
                     .setTooltip('restore default color');
             });
     }
 
 
-    setAndSavePickrSetting(savedColor: string): void {
-        this.plugin.settings.customColorRGB = savedColor;
+    setAndSavePickrSetting(savedColor: string, setting: 'customTextColor' | 'customBackgroundColor'): void {
+        this.plugin.settings[setting] = savedColor;
+        if (setting === 'customTextColor') {
+            this.colorizer.setTextColor(savedColor)
+        } else {
+            this.colorizer.setBackgroundColor(savedColor)
+        }
+
         this.plugin.saveSettings();
     }
 }
