@@ -1,6 +1,28 @@
 # Link Highlighter Plugin
 
-This plugin for [Obsidian](https://obsidian.md/) add highlighting for links of a currently active file.
+This plugin for [Obsidian](https://obsidian.md/) adds highlighting for links of the currently active file.
 
-## Demo
+Can be switched using the icon in the ribbon menu. 
+
+
+## Demo (old)
 ![demo.gif](https://github.com/soctim/obsidian-link-highlighter/blob/dev/src/resources/screenshots/demo.gif)
+
+### Customization
+
+Default colors will follow currently selected theme:
+- `--text-muted` for background color
+- `--interactive-accent` for text color
+
+You can change to preferable colors by:
+- using plugin settings.
+- overriding your `obsidian.css` file.
+
+```css
+/* obsidian-link-highlighter */
+/* https://github.com/soctim/obsidian-link-highlighter */
+body {
+    --plugin-link-highlighter-background-color: var(--text-muted);
+    --plugin-link-highlighter-text-color: var(--interactive-accent);
+}
+```
