@@ -14,7 +14,7 @@ Default colors will follow currently selected theme:
 - `--text-muted` for background color
 - `--interactive-accent` for text color
 
-You can change to preferable colors by:
+You can change the colors by:
 - using plugin settings.
 - overriding your `obsidian.css` file.
 
