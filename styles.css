@@ -1,4 +1,14 @@
-/* Sets all the text color to red! */
 body {
-    color: red;
+    --plugin-link-highlighter-background-color: var(--text-muted);
+    --plugin-link-highlighter-text-color: var(--interactive-accent);
+}
+
+.highlight-related-link {
+    background-color: var(--plugin-link-highlighter-background-color);
+    color: var(--plugin-link-highlighter-text-color);
+}
+
+.link-highlighter-example {
+    background-color: var(--plugin-link-highlighter-background-color)!important;
+    color: var(--plugin-link-highlighter-text-color)!important;
 }

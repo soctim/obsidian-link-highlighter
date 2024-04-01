@@ -1,14 +1,14 @@
 {
-  "name": "obsidian-sample-plugin",
-  "version": "0.9.7",
-  "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
-  "main": "main.js",
+  "name": "obsidian-link-highlighter-plugin",
+  "version": "1.0.0",
+  "description": "Highlight all links from selected file.",
+  "main": "src/main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "build": "rollup --config rollup.config.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "D. Sinitsyn",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^15.1.0",
@@ -19,5 +19,8 @@
     "rollup": "^2.32.1",
     "tslib": "^2.0.3",
     "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@simonwep/pickr": "^1.8.2"
   }
 }
