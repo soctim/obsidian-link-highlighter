@@ -6,7 +6,7 @@ Can be switched using the icon in the ribbon menu.
 
 
 ## Demo (old)
-![demo.gif](https://github.com/soctim/obsidian-link-highlighter/blob/dev/src/resources/screenshots/demo.gif)
+![demo.gif](https://github.com/soctim/obsidian-link-highlighter/blob/master/src/resources/screenshots/demo.gif)
 
 ### Customization
 
