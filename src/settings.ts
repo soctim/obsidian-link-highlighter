@@ -81,6 +81,7 @@ export class HighlighterSettingTab extends PluginSettingTab {
                     el: setting.controlEl.createEl('input', { cls: "picker" }),
                     theme: 'nano',
                     default: pickrDefault,
+                    disabled: !this.plugin.settings.useCustomColors,
                     components: {
                         preview: true,
                         opacity: true,
