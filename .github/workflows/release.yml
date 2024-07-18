@@ -22,16 +22,17 @@ jobs:
           npm install
           npm run build
 
-      - name: Create release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tag="${GITHUB_REF#refs/tags/}"
-
-          gh release create "$tag" \
-            --title="$tag" \
-            --draft \
-            main.js manifest.json styles.css
+          VERSION: ${{ github.ref }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
           
       - name: Upload main.js
         id: upload-main
@@ -55,4 +56,3 @@ jobs:
             asset_name: manifest.json
             asset_content_type: application/json
 
-            
