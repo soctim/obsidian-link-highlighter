@@ -1,6 +1,6 @@
 {
   "name": "obsidian-link-highlighter-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Highlight all links from selected file.",
   "main": "src/main.js",
   "scripts": {
