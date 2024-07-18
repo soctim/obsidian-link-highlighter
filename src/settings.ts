@@ -39,35 +39,34 @@ export class HighlighterSettingTab extends PluginSettingTab {
                     .setValue(this.plugin.settings.useCustomColors)
                     .onChange(async (enabled) => {
                         this.plugin.settings.useCustomColors = enabled
+                        div.toggleClass('link-highlighter__hide_setting', !enabled)
+
                         await this.plugin.saveSettings()
 
                         if (enabled) {
                             this.colorizer.setTextColor(this.plugin.settings.customTextColor)
                             this.colorizer.setBackgroundColor(this.plugin.settings.customBackgroundColor)
-                            toggleInputDisable(false)
                         } else {
-                            toggleInputDisable(true)
                             this.colorizer.setupColors()
                         }
                     })
             })
 
-        let backgroundColorSetting = this.initPickr(containerEl, 'Custom Background Color', this.plugin.settings.customBackgroundColor);
-        let textColorSetting = this.initPickr(containerEl, 'Custom Text Color', this.plugin.settings.customTextColor)
 
-        new Setting(containerEl)
+        // Workaround with class with display: none 
+        // because visibility: hidden works not so good
+        const div = containerEl.createDiv({cls: this.plugin.settings.useCustomColors ? null : 'link-highlighter__hide_setting' });
+
+        this.initPickr(div, 'Custom Background Color', this.plugin.settings.customBackgroundColor);
+        this.initPickr(div, 'Custom Text Color', this.plugin.settings.customTextColor)
+
+        new Setting(div)
             .setName('Element highlighting example')
             .addButton(btn =>
                 btn
                     .setClass('link-highlighter-example')
                     .setButtonText('Hello World!')
-                    .setDisabled(true)
             )
-
-        function toggleInputDisable(value: boolean) {
-            backgroundColorSetting.setDisabled(value)
-            textColorSetting.setDisabled(value)
-        }
     }
 
     initPickr(containerEl: HTMLElement, name: string, defaultColor: string): Setting {
@@ -79,9 +78,8 @@ export class HighlighterSettingTab extends PluginSettingTab {
             .then((setting) => {
                 pickr = Pickr.create({
                     el: setting.controlEl.createEl('input', { cls: "picker" }),
-                    theme: 'nano',
+                    theme: 'monolith',
                     default: pickrDefault,
-                    disabled: !this.plugin.settings.useCustomColors,
                     components: {
                         preview: true,
                         opacity: true,
@@ -112,7 +110,6 @@ export class HighlighterSettingTab extends PluginSettingTab {
             })
             .addExtraButton((btn) => {
                 btn.setIcon("reset")
-                    .setDisabled(!this.plugin.settings.useCustomColors)
                     .onClick(() => {
                         pickr.setColor(defaultColor);
                         this.setAndSavePickrSetting(defaultColor, name === 'Custom Text Color' ? 'customTextColor' : 'customBackgroundColor');
